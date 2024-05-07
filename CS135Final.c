@@ -9,8 +9,8 @@
 
 void load_image(char filename[], char image[][MAX_SIZE], int *rows, int *columns);
 void display_image(char image[][MAX_SIZE], int rows, int columns);
-void edit_image(char image[][MAX_SIZE], int rows, int columns);
-void crop_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns, int crop_left_column, int crop_right_column, int crop_top_row, int crop_bottom_row);
+void edit_image(char image[][MAX_SIZE], int *rows, int *columns);
+void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int crop_left_column, int crop_right_column, int crop_top_row, int crop_bottom_row);
 void dim_image(char image[][MAX_SIZE], int rows, int columns);
 void brighten_image(char image[][MAX_SIZE], int rows, int columns);
 
@@ -42,7 +42,7 @@ int main () {
 				display_image(image, rows, columns);
 				break;
 			case 3:
-				edit_image(image, rows, columns);
+				edit_image(image, &rows, &columns);
 				break;
 			case 0:
 				printf("\nGoodbye!\n");
@@ -105,7 +105,7 @@ void display_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns) {
 	printf("\n");
 }
 
-void edit_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns) {
+void edit_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns) {
 	char choice;
 	do {
 		printf("\n**EDITING**\n");
@@ -124,19 +124,19 @@ void edit_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns) {
 				printf("Which column do you want to be the new right side? ");
 				scanf("%d", &crop_right_column);
 				printf("Which row do you want to be the new top? ");
-                		scanf("%d", &crop_top_row);
-                		printf("Which row do you want to be the new bottom? ");
-                		scanf("%d", &crop_bottom_row);
+				scanf("%d", &crop_top_row);
+				printf("Which row do you want to be the new bottom? ");
+				scanf("%d", &crop_bottom_row);				
 				crop_image(image, rows, columns, crop_left_column, crop_right_column, crop_top_row, crop_bottom_row);
-				display_image(image, rows, columns);
+				display_image(image, *rows, *columns);
 				break;
 			case '2':
-				dim_image(image, rows, columns);
-				display_image(image, rows, columns);
+				dim_image(image, *rows, *columns);
+				display_image(image, *rows, *columns);
 				break;
 			case '3':
-				brighten_image(image, rows, columns);
-				display_image(image, rows, columns);
+				brighten_image(image, *rows, *columns);
+				display_image(image, *rows, *columns);
 				break;
 			case '0':
 				printf("Returning to main menu.\n");
@@ -165,44 +165,29 @@ void brighten_image(char image[][MAX_SIZE], int rows, int columns) {
         	for(int k = 0; k <= columns; k++) {
             		char pixels = image[i][k];
            		if(pixels >= '0' && pixels < '4') {
-                		image[i][k] = pixels + 1;                		
-            		}
+                		image[i][k] = pixels + 1;               		             		 
+            		}  
             	}
        	 }
 }
 
-void crop_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns, int crop_top_row, int crop_bottom_row, int crop_left_column, int crop_right_column) {
-    if (crop_top_row < 0 || crop_bottom_row >= rows || crop_left_column < 0 || crop_right_column >= columns ||
-        crop_top_row >= crop_bottom_row || crop_left_column >= crop_right_column) {
-        printf("Invalid crop dimensions or starting position.\n");
-        return;
-    }
-
-  
-    for (int i = 0; i <= crop_bottom_row - crop_top_row; i++) {
-        for (int j = 0; j <= crop_right_column - crop_left_column; j++) {
-            image[i][j] = image[crop_top_row + i][crop_left_column + j];
-        }
-    }
-
- 
-    rows = crop_bottom_row - crop_top_row + 1;
-    columns = crop_right_column - crop_left_column + 1;
-
-    
-    printf("\nCropped Image (Rows: %d, Columns: %d):\n", rows, columns);
-    for (int i = 0; i < rows; i++) {
-        printf("%2d ", i + 1); 
-        for (int j = 0; j < columns; j++) {
-            printf("%c", image[i][j]);
-        }
-        printf("\n");
-    }
-    printf("   ");
-    for (int j = 0; j < columns; j++) {
-        printf("%2d", j + 1); 
-    }
-    printf("\n\n");
+void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int crop_top_row, int crop_bottom_row, int crop_left_column, int crop_right_column) {		
+	int cropped_rows = crop_bottom_row - crop_top_row + 1;
+	int cropped_columns = crop_right_column - crop_left_column + 1;
+	char cropped_image[cropped_rows][cropped_columns];	
+	
+	for (int i = 0; i < cropped_rows; i++) {
+        	for (int k = 0; k < cropped_columns; k++) {
+            		cropped_image[i][k] = image[crop_top_row + i][crop_left_column + k];
+        	}
+	}
+	*rows = cropped_rows;
+	*columns = cropped_columns;
+	for(int i = 0; i < cropped_rows; i++){
+    		for (int k = 0; k < cropped_columns; k++) {
+    		image[i][k] = cropped_image[i][k];
+		}
+	}
 }
 
 
