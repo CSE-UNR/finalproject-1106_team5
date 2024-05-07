@@ -164,7 +164,7 @@ void brighten_image(char image[][MAX_SIZE], int rows, int columns) {
 	for(int i = 0; i <= rows; i++) {
         	for(int k = 0; k <= columns; k++) {
             		char pixels = image[i][k];
-           		if(pixels >= '0' && pixels <= '4') {
+           		if(pixels >= '0' && pixels < '4') {
                 		image[i][k] = pixels + 1;                		
             		}
             	}
