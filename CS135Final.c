@@ -130,14 +130,17 @@ void edit_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns) {
 				scanf("%d", &crop_bottom_row);				
 				crop_image(image, rows, columns, crop_left_column, crop_right_column, crop_top_row, crop_bottom_row);
 				display_image(image, *rows, *columns);
+				save_image(image, *rows, *columns);
 				break;
 			case '2':
 				dim_image(image, *rows, *columns);
 				display_image(image, *rows, *columns);
+				save_image(image, *rows, *columns);
 				break;
 			case '3':
 				brighten_image(image, *rows, *columns);
 				display_image(image, *rows, *columns);
+				save_image(image, *rows, *columns);
 				break;
 			case '0':
 				printf("Returning to main menu.\n");
