@@ -13,6 +13,7 @@ void edit_image(char image[][MAX_SIZE], int *rows, int *columns);
 void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int crop_left_column, int crop_right_column, int crop_top_row, int crop_bottom_row);
 void dim_image(char image[][MAX_SIZE], int rows, int columns);
 void brighten_image(char image[][MAX_SIZE], int rows, int columns);
+void save_image(char image[][MAX_SIZE], int rows, int columns);
 
 
       
@@ -77,8 +78,8 @@ void load_image(char filename[], char image[MAX_SIZE][MAX_SIZE], int *rows, int 
 }
 
 void display_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns) {
-	for (int i = 0; i <= rows; i++) {
-		for (int k = 0; k <= columns; k++) {
+	for (int i = 0; i < rows; i++) {
+		for (int k = 0; k < columns; k++) {
 			char pixels = image[i][k];
 			switch(pixels) {
 				case '0':
@@ -190,9 +191,44 @@ void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int cro
 	}
 }
 
+void save_image(char image[][MAX_SIZE], int rows, int columns) {
+    char choice;
+
+    printf("Would you like to save the file? (Y/n) ");
+    scanf(" %c", &choice);
+
+    printf("\n");
+
+    if (choice == 'Y' || choice == 'y') {
+        char filename[MAX_SIZE];
+        printf("What do you want to name the image file? (include the extension) ");
+        scanf("%s", filename);
+        printf("\n");
+
+        FILE *file = fopen(filename, "w");
+        if (file == NULL) {
+            printf("Error opening the file.\n");
+            return;
+        }
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                fprintf(file, "%c", image[i][j]);
+            }
+            fprintf(file, "\n");
+        }
+
+        fclose(file);
+        printf("Image successfully saved!\n");
+    } else if (choice == 'N' || choice == 'n') {
+        return;
+    } else {
+        printf("Invalid choice. Returning to main menu.\n");
+    }
+}
+
 
 
 
 	
 			
-
