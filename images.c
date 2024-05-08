@@ -185,15 +185,15 @@ void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int cro
 	int cropped_columns = crop_right_column - crop_left_column + 1;
 	char cropped_image[cropped_rows][cropped_columns];	
 	
-	for (int i = 0; i < cropped_rows; i++) {
-        	for (int k = 0; k < cropped_columns; k++) {
+	for(int i = 0; i < cropped_rows; i++) {
+        	for(int k = 0; k < cropped_columns; k++) {
             		cropped_image[i][k] = image[crop_top_row + i][crop_left_column + k];
         	}
 	}
 	*rows = cropped_columns;
 	*columns = cropped_rows;
 	for(int i = 0; i < cropped_rows; i++){
-    		for (int k = 0; k < cropped_columns; k++) {
+    		for(int k = 0; k < cropped_columns; k++) {
     		image[i][k] = cropped_image[i][k];
 		}
 	}
