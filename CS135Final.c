@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define MAX_SIZE 150
+#define MAX_SIZE 500
 
 void load_image(char filename[], char image[][MAX_SIZE], int *rows, int *columns);
 void display_image(char image[][MAX_SIZE], int rows, int columns);
@@ -46,8 +46,8 @@ int main () {
 				edit_image(image, &rows, &columns);
 				break;
 			case 0:
-				printf("\nGoodbye!\n");
-				break;
+				printf("Goodbye!\n");
+				return 0;
 			default:
 				printf("\nInvalid option, please try again.");
 			}
@@ -58,23 +58,22 @@ int main () {
 
 void load_image(char filename[], char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns) { 		
 	FILE *file = fopen(filename, "r");
-	if (file == NULL) {
-		printf("Error opening the file.\n");
-		return;
-	}
-	
-	*rows = *columns = 0;	
-	while (fscanf(file, "%c", &image[*rows][*columns]) == 1) {
-		if (image[*rows][*columns] == '\n') {
-		(*rows)++;
-		*columns = 0;
-	} else {
-		(*columns)++;
-	}
-	}
-	fclose(file);
-	printf("\nImage successfully loaded!\n\n");
-		
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return;
+    }
+    
+    *rows = *columns = 0;    
+    while (fscanf(file, "%c", &image[*rows][*columns]) == 1) {
+        if (image[*rows][*columns] == '\n') {
+            (*rows)++;
+            *columns = 0;
+        } else {
+            (*columns)++;
+        }
+    }
+    fclose(file);
+    printf("\nImage successfully loaded!\n\n");
 }
 
 void display_image(char image[MAX_SIZE][MAX_SIZE], int rows, int columns) {
@@ -143,7 +142,7 @@ void edit_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns) {
 				save_image(image, *rows, *columns);
 				break;
 			case '0':
-				printf("Returning to main menu.\n");
+				printf("\nReturning to main menu.\n\n");
 				break;
 			default:
 				printf("Invalid choice, please try again.\n");
@@ -185,8 +184,8 @@ void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int cro
             		cropped_image[i][k] = image[crop_top_row + i][crop_left_column + k];
         	}
 	}
-	*rows = cropped_rows;
-	*columns = cropped_columns;
+	*rows = cropped_columns;
+	*columns = cropped_rows;
 	for(int i = 0; i < cropped_rows; i++){
     		for (int k = 0; k < cropped_columns; k++) {
     		image[i][k] = cropped_image[i][k];
@@ -197,7 +196,7 @@ void crop_image(char image[MAX_SIZE][MAX_SIZE], int *rows, int *columns, int cro
 void save_image(char image[][MAX_SIZE], int rows, int columns) {
     char choice;
 
-    printf("Would you like to save the file? (Y/n) ");
+    printf("Would you like to save the file? (y/n) ");
     scanf(" %c", &choice);
 
     printf("\n");
@@ -215,8 +214,8 @@ void save_image(char image[][MAX_SIZE], int rows, int columns) {
         }
 
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                fprintf(file, "%c", image[i][j]);
+            for (int k = 0; k < columns; k++) {
+                fprintf(file, "%c", image[i][k]);
             }
             fprintf(file, "\n");
         }
